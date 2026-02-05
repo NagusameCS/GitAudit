@@ -46,12 +46,9 @@
             
             // Exchange code for token via proxy
             try {
-                ui.showAlert('Completing sign in...', 'info');
-                const token = await auth.handleCallback();
+                const token = await auth.handleCallback(code);
                 await auth.setAccessToken(token);
-                ui.hideAlert();
                 ui.showAuthenticatedUI();
-                ui.showAlert('Successfully signed in!', 'success');
             } catch (error) {
                 console.error('OAuth callback error:', error);
                 ui.showAlert(`Sign in failed: ${error.message}`, 'error');

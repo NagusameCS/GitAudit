@@ -122,25 +122,9 @@ class GitHubAuth {
     
     /**
      * Handle OAuth callback - exchange code for token via proxy
+     * @param {string} code - The authorization code from GitHub
      */
-    async handleCallback() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const code = urlParams.get('code');
-        const state = urlParams.get('state');
-        const error = urlParams.get('error');
-        
-        if (error) {
-            throw new Error(`OAuth error: ${urlParams.get('error_description') || error}`);
-        }
-        
-        // Verify state to prevent CSRF (skip if state not present - user may have navigated directly)
-        const savedState = sessionStorage.getItem('oauth_state');
-        if (savedState && state && state !== savedState) {
-            console.warn('OAuth state mismatch - possible CSRF attempt or stale session');
-            // Clear the bad state and continue anyway for better UX
-        }
-        sessionStorage.removeItem('oauth_state');
-        
+    async handleCallback(code) {
         if (!code) {
             throw new Error('No authorization code received');
         }
