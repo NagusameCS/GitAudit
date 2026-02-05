@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitAudit - Comprehensive Repository Analysis</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+</head>
+<body>
+    <div id="app">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="nav-brand">
+                <i class="fas fa-shield-alt"></i>
+                <span>GitAudit</span>
+            </div>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#how-it-works">How It Works</a>
+                <a href="https://github.com/NagusameCS/GitAudit" target="_blank">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+            </div>
+            <div class="nav-auth" id="nav-auth">
+                <button class="btn btn-primary" id="nav-login-btn">
+                    <i class="fab fa-github"></i> Sign In
+                </button>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="hero" id="hero-section">
+            <div class="hero-content">
+                <h1>
+                    <span class="gradient-text">GitAudit</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Comprehensive code analysis powered by your browser. 
+                    Find security vulnerabilities, unused code, optimization opportunities, and more.
+                </p>
+                <div class="hero-actions">
+                    <button class="btn btn-large btn-primary" id="hero-login-btn">
+                        <i class="fab fa-github"></i> Sign in with GitHub
+                    </button>
+                    <button class="btn btn-large btn-secondary" id="demo-btn">
+                        <i class="fas fa-play"></i> Try Demo
+                    </button>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number">100%</span>
+                        <span class="stat-label">Client-Side Processing</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">50+</span>
+                        <span class="stat-label">Audit Rules</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">Secure</span>
+                        <span class="stat-label">Your Code, Your Machine</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="code-preview">
+                    <div class="code-header">
+                        <span class="dot red"></span>
+                        <span class="dot yellow"></span>
+                        <span class="dot green"></span>
+                        <span class="filename">analysis.js</span>
+                    </div>
+                    <pre class="code-content"><code><span class="comment">// GitAudit analyzing...</span>
+<span class="keyword">const</span> audit = <span class="keyword">await</span> GitAudit.analyze({
+  <span class="property">security</span>: <span class="boolean">true</span>,
+  <span class="property">performance</span>: <span class="boolean">true</span>,
+  <span class="property">codeQuality</span>: <span class="boolean">true</span>,
+  <span class="property">unusedCode</span>: <span class="boolean">true</span>
+});
+
+<span class="comment">// Found: 12 issues</span>
+<span class="comment">// Security: 3 | Performance: 5</span>
+<span class="comment">// Quality: 2 | Unused: 2</span></code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features" id="features">
+            <h2>Comprehensive Analysis</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon security">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h3>Security Analysis</h3>
+                    <p>Detect exposed API keys, hardcoded secrets, weak encryption, SQL injection vulnerabilities, and more.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon performance">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Performance Optimization</h3>
+                    <p>Identify loop optimizations, redundant operations, and suggest JIT-style improvements for faster code.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon quality">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3>Code Quality</h3>
+                    <p>Check readability, commenting standards, naming conventions, and coding best practices.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon unused">
+                        <i class="fas fa-trash-alt"></i>
+                    </div>
+                    <h3>Dead Code Detection</h3>
+                    <p>Find unused variables, functions, imports, files, and components that can be safely removed.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon patterns">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <h3>Pattern Recognition</h3>
+                    <p>Understand code patterns and suggest simpler, more efficient alternatives.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon report">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h3>Detailed Reports</h3>
+                    <p>Get comprehensive statistics, visualizations, and actionable recommendations.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works -->
+        <section class="how-it-works" id="how-it-works">
+            <h2>How It Works</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Sign In</h3>
+                    <p>Authenticate with GitHub to access your repositories securely.</p>
+                </div>
+                <div class="step-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Select Repository</h3>
+                    <p>Choose from your repos or paste any public repository URL.</p>
+                </div>
+                <div class="step-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Run Audit</h3>
+                    <p>Analysis runs entirely in your browser - your code never leaves your machine.</p>
+                </div>
+                <div class="step-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Get Results</h3>
+                    <p>Review detailed reports and optionally create a branch with fixes.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard Section (Hidden until logged in) -->
+        <section class="dashboard hidden" id="dashboard">
+            <div class="dashboard-header">
+                <div class="user-info" id="user-info">
+                    <img src="" alt="User Avatar" id="user-avatar" class="avatar">
+                    <span id="user-name">User</span>
+                </div>
+                <button class="btn btn-secondary" id="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Sign Out
+                </button>
+            </div>
+
+            <div class="repo-selection">
+                <h2>Select a Repository to Audit</h2>
+                
+                <div class="selection-tabs">
+                    <button class="tab active" data-tab="my-repos">
+                        <i class="fas fa-folder"></i> My Repositories
+                    </button>
+                    <button class="tab" data-tab="external-repo">
+                        <i class="fas fa-link"></i> External Repository
+                    </button>
+                </div>
+
+                <div class="tab-content active" id="my-repos">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="repo-search" placeholder="Search your repositories...">
+                    </div>
+                    <div class="repos-list" id="repos-list">
+                        <div class="loading">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <span>Loading repositories...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="external-repo">
+                    <div class="external-input">
+                        <input type="text" id="external-repo-url" placeholder="https://github.com/owner/repository">
+                        <button class="btn btn-primary" id="analyze-external">
+                            <i class="fas fa-search"></i> Analyze
+                        </button>
+                    </div>
+                    <p class="hint">Enter any public GitHub repository URL</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Audit Progress Section -->
+        <section class="audit-progress hidden" id="audit-progress">
+            <div class="progress-container">
+                <h2>Auditing Repository</h2>
+                <p class="repo-name" id="auditing-repo-name">owner/repository</p>
+                
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="audit-progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                    <span class="progress-text" id="progress-text">0%</span>
+                </div>
+
+                <div class="audit-status" id="audit-status">
+                    <div class="status-item active">
+                        <i class="fas fa-download"></i>
+                        <span>Fetching repository...</span>
+                    </div>
+                    <div class="status-item">
+                        <i class="fas fa-file-code"></i>
+                        <span>Analyzing files...</span>
+                    </div>
+                    <div class="status-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Security scan...</span>
+                    </div>
+                    <div class="status-item">
+                        <i class="fas fa-bolt"></i>
+                        <span>Performance analysis...</span>
+                    </div>
+                    <div class="status-item">
+                        <i class="fas fa-broom"></i>
+                        <span>Dead code detection...</span>
+                    </div>
+                    <div class="status-item">
+                        <i class="fas fa-chart-pie"></i>
+                        <span>Generating report...</span>
+                    </div>
+                </div>
+
+                <div class="files-processed">
+                    <span id="files-count">0</span> files processed
+                    <span class="separator">|</span>
+                    <span id="lines-count">0</span> lines analyzed
+                </div>
+
+                <button class="btn btn-secondary" id="cancel-audit">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section class="results hidden" id="results">
+            <div class="results-header">
+                <div class="results-title">
+                    <h2>Audit Results</h2>
+                    <p class="repo-name" id="results-repo-name">owner/repository</p>
+                </div>
+                <div class="results-actions">
+                    <button class="btn btn-secondary" id="new-audit-btn">
+                        <i class="fas fa-redo"></i> New Audit
+                    </button>
+                    <button class="btn btn-primary" id="clone-with-fixes-btn">
+                        <i class="fas fa-code-branch"></i> Create Branch with Fixes
+                    </button>
+                    <button class="btn btn-secondary" id="download-report-btn">
+                        <i class="fas fa-download"></i> Download Report
+                    </button>
+                </div>
+            </div>
+
+            <!-- Score Overview -->
+            <div class="score-overview">
+                <div class="overall-score">
+                    <div class="score-circle" id="overall-score-circle">
+                        <svg viewBox="0 0 100 100">
+                            <circle class="score-bg" cx="50" cy="50" r="45"></circle>
+                            <circle class="score-fill" cx="50" cy="50" r="45" id="score-circle-fill"></circle>
+                        </svg>
+                        <div class="score-value" id="overall-score-value">--</div>
+                        <div class="score-label">Overall Score</div>
+                    </div>
+                </div>
+                <div class="score-breakdown">
+                    <div class="score-item">
+                        <div class="score-item-header">
+                            <i class="fas fa-lock"></i>
+                            <span>Security</span>
+                        </div>
+                        <div class="score-bar">
+                            <div class="score-bar-fill" id="security-score-bar"></div>
+                        </div>
+                        <span class="score-value" id="security-score">--</span>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-item-header">
+                            <i class="fas fa-bolt"></i>
+                            <span>Performance</span>
+                        </div>
+                        <div class="score-bar">
+                            <div class="score-bar-fill" id="performance-score-bar"></div>
+                        </div>
+                        <span class="score-value" id="performance-score">--</span>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-item-header">
+                            <i class="fas fa-code"></i>
+                            <span>Code Quality</span>
+                        </div>
+                        <div class="score-bar">
+                            <div class="score-bar-fill" id="quality-score-bar"></div>
+                        </div>
+                        <span class="score-value" id="quality-score">--</span>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-item-header">
+                            <i class="fas fa-broom"></i>
+                            <span>Cleanliness</span>
+                        </div>
+                        <div class="score-bar">
+                            <div class="score-bar-fill" id="cleanliness-score-bar"></div>
+                        </div>
+                        <span class="score-value" id="cleanliness-score">--</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics -->
+            <div class="statistics">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-file-code"></i></div>
+                    <div class="stat-content">
+                        <span class="stat-number" id="stat-files">0</span>
+                        <span class="stat-label">Files Analyzed</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-code"></i></div>
+                    <div class="stat-content">
+                        <span class="stat-number" id="stat-lines">0</span>
+                        <span class="stat-label">Lines of Code</span>
+                    </div>
+                </div>
+                <div class="stat-card critical">
+                    <div class="stat-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                    <div class="stat-content">
+                        <span class="stat-number" id="stat-critical">0</span>
+                        <span class="stat-label">Critical Issues</span>
+                    </div>
+                </div>
+                <div class="stat-card warning">
+                    <div class="stat-icon"><i class="fas fa-exclamation-circle"></i></div>
+                    <div class="stat-content">
+                        <span class="stat-number" id="stat-warnings">0</span>
+                        <span class="stat-label">Warnings</span>
+                    </div>
+                </div>
+                <div class="stat-card info">
+                    <div class="stat-icon"><i class="fas fa-info-circle"></i></div>
+                    <div class="stat-content">
+                        <span class="stat-number" id="stat-suggestions">0</span>
+                        <span class="stat-label">Suggestions</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Issues List with Directory View -->
+            <div class="issues-container">
+                <div class="issues-sidebar">
+                    <h3><i class="fas fa-folder-tree"></i> File Explorer</h3>
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="critical">Critical</button>
+                        <button class="filter-btn" data-filter="warning">Warning</button>
+                        <button class="filter-btn" data-filter="info">Info</button>
+                    </div>
+                    <div class="file-tree" id="file-tree">
+                        <!-- File tree will be generated here -->
+                    </div>
+                </div>
+                <div class="issues-main">
+                    <div class="issues-header">
+                        <h3><i class="fas fa-bug"></i> Issues</h3>
+                        <div class="issues-sort">
+                            <select id="issues-sort">
+                                <option value="severity">Sort by Severity</option>
+                                <option value="file">Sort by File</option>
+                                <option value="type">Sort by Type</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="issues-list" id="issues-list">
+                        <!-- Issues will be generated here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Clone Modal -->
+        <div class="modal hidden" id="clone-modal">
+            <div class="modal-overlay"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-code-branch"></i> Create Branch with Fixes</h3>
+                    <button class="modal-close" id="modal-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>This will create a new branch in the GitAudit repository with the suggested fixes applied.</p>
+                    
+                    <div class="form-group">
+                        <label for="branch-name">Branch Name</label>
+                        <input type="text" id="branch-name" placeholder="audit-fixes-owner-repo">
+                    </div>
+
+                    <div class="fixes-preview">
+                        <h4>Fixes to Apply</h4>
+                        <div class="fixes-list" id="fixes-list">
+                            <!-- Fixes will be listed here -->
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" id="modal-cancel">Cancel</button>
+                    <button class="btn btn-primary" id="modal-confirm">
+                        <i class="fas fa-code-branch"></i> Create Branch
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>GitAudit</span>
+                </div>
+                <div class="footer-links">
+                    <a href="https://github.com/NagusameCS/GitAudit" target="_blank">GitHub</a>
+                    <a href="https://github.com/NagusameCS/GitAudit/issues" target="_blank">Report Issue</a>
+                    <a href="#" id="privacy-link">Privacy</a>
+                </div>
+                <div class="footer-note">
+                    All analysis is performed locally in your browser. Your code never leaves your machine.
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/github-api.js"></script>
+    <script src="js/audit-engine.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

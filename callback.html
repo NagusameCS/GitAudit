@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitAudit - Authenticating...</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background-color: #0d1117;
+            color: #e6edf3;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .logo {
+            font-size: 48px;
+            margin-bottom: 24px;
+            color: #238636;
+        }
+        
+        h1 {
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+        
+        p {
+            color: #8b949e;
+            margin-bottom: 24px;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #30363d;
+            border-top-color: #58a6ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 24px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .error {
+            background-color: rgba(248, 81, 73, 0.1);
+            border: 1px solid rgba(248, 81, 73, 0.4);
+            border-radius: 6px;
+            padding: 16px;
+            color: #f85149;
+            display: none;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #238636;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            margin-top: 16px;
+        }
+        
+        .btn:hover {
+            background-color: #2ea043;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <i class="fas fa-shield-alt"></i>
+        </div>
+        <div class="spinner" id="spinner"></div>
+        <h1 id="title">Authenticating...</h1>
+        <p id="message">Please wait while we complete the authentication process.</p>
+        <div class="error" id="error"></div>
+        <a href="/" class="btn" id="home-btn" style="display: none;">Return to GitAudit</a>
+    </div>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const code = urlParams.get('code');
+            const state = urlParams.get('state');
+            const error = urlParams.get('error');
+            const errorDescription = urlParams.get('error_description');
+            
+            const spinner = document.getElementById('spinner');
+            const title = document.getElementById('title');
+            const message = document.getElementById('message');
+            const errorDiv = document.getElementById('error');
+            const homeBtn = document.getElementById('home-btn');
+            
+            if (error) {
+                // OAuth error
+                showError(errorDescription || error);
+            } else if (code) {
+                // Verify state
+                const savedState = sessionStorage.getItem('oauth_state');
+                
+                if (state !== savedState) {
+                    showError('Invalid OAuth state. This may be a security issue. Please try again.');
+                } else {
+                    // Store the code and redirect to main app
+                    sessionStorage.setItem('oauth_code', code);
+                    sessionStorage.removeItem('oauth_state');
+                    
+                    // Redirect to main app with code
+                    window.location.href = '/?code=' + encodeURIComponent(code);
+                }
+            } else {
+                showError('No authorization code received. Please try signing in again.');
+            }
+            
+            function showError(msg) {
+                spinner.style.display = 'none';
+                title.textContent = 'Authentication Failed';
+                message.style.display = 'none';
+                errorDiv.textContent = msg;
+                errorDiv.style.display = 'block';
+                homeBtn.style.display = 'inline-block';
+            }
+        })();
+    </script>
+</body>
+</html>
