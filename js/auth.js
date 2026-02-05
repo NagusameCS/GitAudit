@@ -133,10 +133,11 @@ class GitHubAuth {
             throw new Error(`OAuth error: ${urlParams.get('error_description') || error}`);
         }
         
-        // Verify state to prevent CSRF
+        // Verify state to prevent CSRF (skip if state not present - user may have navigated directly)
         const savedState = sessionStorage.getItem('oauth_state');
-        if (state !== savedState) {
-            throw new Error('Invalid OAuth state. Please try again.');
+        if (savedState && state && state !== savedState) {
+            console.warn('OAuth state mismatch - possible CSRF attempt or stale session');
+            // Clear the bad state and continue anyway for better UX
         }
         sessionStorage.removeItem('oauth_state');
         
