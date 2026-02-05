@@ -48,7 +48,8 @@
             try {
                 const token = await auth.handleCallback(code);
                 await auth.setAccessToken(token);
-                ui.showAuthenticatedUI();
+                ui.showLoggedInState();
+                ui.showDashboard();
             } catch (error) {
                 console.error('OAuth callback error:', error);
                 ui.showAlert(`Sign in failed: ${error.message}`, 'error');

@@ -435,11 +435,13 @@ class UIController {
      * Update score displays
      */
     updateScores(scores) {
-        // Overall score
+        // Overall score - show as letter grade
         const scoreValue = document.getElementById('overall-score-value');
         const scoreFill = document.getElementById('score-circle-fill');
         
-        if (scoreValue) scoreValue.textContent = scores.overall;
+        // Convert numeric score to letter grade
+        const letterGrade = this.getLetterGrade(scores.overall);
+        if (scoreValue) scoreValue.textContent = letterGrade;
         if (scoreFill) {
             // Circle circumference is 2 * π * r = 283
             const offset = 283 - (scores.overall / 100) * 283;
@@ -455,6 +457,25 @@ class UIController {
             if (bar) bar.style.width = `${scores[type]}%`;
             if (value) value.textContent = scores[type];
         });
+    }
+    
+    /**
+     * Convert numeric score to letter grade
+     */
+    getLetterGrade(score) {
+        if (score >= 97) return 'A+';
+        if (score >= 93) return 'A';
+        if (score >= 90) return 'A-';
+        if (score >= 87) return 'B+';
+        if (score >= 83) return 'B';
+        if (score >= 80) return 'B-';
+        if (score >= 77) return 'C+';
+        if (score >= 73) return 'C';
+        if (score >= 70) return 'C-';
+        if (score >= 67) return 'D+';
+        if (score >= 63) return 'D';
+        if (score >= 60) return 'D-';
+        return 'F';
     }
     
     /**
