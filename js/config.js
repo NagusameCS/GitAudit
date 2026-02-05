@@ -1,13 +1,12 @@
 /**
  * GitAudit Configuration
  * 
- * For GitHub Pages deployment, we use GitHub OAuth with a device flow
- * or GitHub Apps OAuth for authentication.
+ * For GitHub Pages deployment, we use GitHub OAuth with a Cloudflare Worker proxy.
  * 
- * Note: For production, you'll need to:
- * 1. Create a GitHub OAuth App at https://github.com/settings/developers
- * 2. Set the callback URL to your GitHub Pages URL
- * 3. Replace the CLIENT_ID below with your app's client ID
+ * Setup:
+ * 1. Deploy the worker from /worker/oauth-worker.js to Cloudflare Workers
+ * 2. Add your Client ID and Secret as environment variables in the worker
+ * 3. Update OAUTH_PROXY_URL below with your worker URL
  */
 
 const CONFIG = {
@@ -15,8 +14,12 @@ const CONFIG = {
     // App: https://github.com/apps/gitauditer
     GITHUB_CLIENT_ID: 'Iv23li0msqAaBhGTV9Pa',
     
+    // OAuth Proxy URL (Cloudflare Worker)
+    // Deploy worker/oauth-worker.js and put the URL here
+    OAUTH_PROXY_URL: '', // e.g., 'https://gitaudit-oauth.YOUR-SUBDOMAIN.workers.dev'
+    
     // GitHub Pages URL
-    CALLBACK_URL: 'https://nagusame.github.io/GitAudit/callback.html',
+    CALLBACK_URL: 'https://nagusamecs.github.io/GitAudit/callback.html',
     
     // GitHub API Base URL
     GITHUB_API_BASE: 'https://api.github.com',

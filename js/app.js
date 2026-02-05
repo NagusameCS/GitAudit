@@ -36,12 +36,26 @@
             // Clean URL
             window.history.replaceState({}, document.title, window.location.pathname);
             
-            // For GitHub Pages, we need a backend to exchange the code for a token
-            // Show message to user
-            ui.showAlert(
-                'OAuth callback received. To complete authentication, you need to set up a backend service to exchange the code for an access token. ' +
-                'For now, you can use the demo mode to explore GitAudit.'
-            );
+            // Check if proxy is configured
+            if (!CONFIG.OAUTH_PROXY_URL) {
+                ui.showAlert(
+                    'OAuth proxy not configured. Please deploy the Cloudflare Worker from worker/oauth-worker.js and update OAUTH_PROXY_URL in js/config.js'
+                );
+                return;
+            }
+            
+            // Exchange code for token via proxy
+            try {
+                ui.showAlert('Completing sign in...', 'info');
+                const token = await auth.handleCallback();
+                await auth.setAccessToken(token);
+                ui.hideAlert();
+                ui.showAuthenticatedUI();
+                ui.showAlert('Successfully signed in!', 'success');
+            } catch (error) {
+                console.error('OAuth callback error:', error);
+                ui.showAlert(`Sign in failed: ${error.message}`, 'error');
+            }
         }
     }
     

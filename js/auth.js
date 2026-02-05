@@ -1,6 +1,6 @@
 /**
  * GitAudit Authentication Module
- * Handles GitHub Device Flow authentication (works without backend)
+ * Handles GitHub OAuth authentication via redirect flow
  */
 
 class GitHubAuth {
@@ -8,7 +8,6 @@ class GitHubAuth {
         this.accessToken = null;
         this.userData = null;
         this.isAuthenticated = false;
-        this.deviceFlowPolling = null;
         
         // Try to restore session from localStorage
         this.restoreSession();
@@ -57,184 +56,114 @@ class GitHubAuth {
     }
     
     /**
-     * Initiate GitHub Device Flow authentication
-     * This works entirely client-side without a backend!
+     * Initiate GitHub OAuth login via redirect
      */
-    async login() {
-        try {
-            // Step 1: Request device and user verification codes
-            const deviceCodeResponse = await fetch('https://github.com/login/device/code', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    client_id: CONFIG.GITHUB_CLIENT_ID,
-                    scope: 'repo read:user user:email'
-                })
-            });
-            
-            if (!deviceCodeResponse.ok) {
-                throw new Error('Failed to initiate device flow');
-            }
-            
-            const deviceData = await deviceCodeResponse.json();
-            
-            // Show user the code and verification URL
-            this.showDeviceFlowModal(deviceData);
-            
-            // Step 2: Poll for the access token
-            await this.pollForAccessToken(deviceData);
-            
-        } catch (error) {
-            console.error('Login failed:', error);
-            this.hideDeviceFlowModal();
-            throw error;
+    login() {
+        // Check if OAuth proxy is configured
+        if (!CONFIG.OAUTH_PROXY_URL) {
+            this.showSetupRequiredModal();
+            return;
         }
+        
+        // Generate a random state for CSRF protection
+        const state = this.generateState();
+        sessionStorage.setItem('oauth_state', state);
+        
+        // Required scopes for GitAudit
+        const scopes = 'repo read:user user:email';
+        
+        // Build OAuth authorization URL
+        const authUrl = new URL('https://github.com/login/oauth/authorize');
+        authUrl.searchParams.set('client_id', CONFIG.GITHUB_CLIENT_ID);
+        authUrl.searchParams.set('redirect_uri', CONFIG.CALLBACK_URL);
+        authUrl.searchParams.set('scope', scopes);
+        authUrl.searchParams.set('state', state);
+        
+        // Redirect to GitHub for authorization
+        window.location.href = authUrl.toString();
     }
     
     /**
-     * Show modal with device flow instructions
+     * Show modal explaining setup is required
      */
-    showDeviceFlowModal(deviceData) {
-        // Create modal if it doesn't exist
-        let modal = document.getElementById('device-flow-modal');
+    showSetupRequiredModal() {
+        let modal = document.getElementById('setup-required-modal');
         if (!modal) {
             modal = document.createElement('div');
-            modal.id = 'device-flow-modal';
+            modal.id = 'setup-required-modal';
             modal.className = 'modal';
             modal.innerHTML = `
                 <div class="modal-overlay"></div>
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h3><i class="fab fa-github"></i> Sign in with GitHub</h3>
+                        <h3><i class="fas fa-cog"></i> Setup Required</h3>
                     </div>
-                    <div class="modal-body" style="text-align: center;">
-                        <p style="margin-bottom: 20px;">To sign in, open this URL in your browser:</p>
-                        <a href="${deviceData.verification_uri}" target="_blank" class="btn btn-secondary" style="margin-bottom: 20px; display: inline-block;">
-                            <i class="fas fa-external-link-alt"></i> ${deviceData.verification_uri}
-                        </a>
-                        <p style="margin-bottom: 10px;">And enter this code:</p>
-                        <div style="font-size: 32px; font-weight: bold; letter-spacing: 4px; padding: 20px; background: var(--secondary-color); border-radius: 8px; margin-bottom: 20px; font-family: var(--font-mono);" id="device-code">
-                            ${deviceData.user_code}
-                        </div>
-                        <button class="btn btn-secondary" onclick="navigator.clipboard.writeText('${deviceData.user_code}')">
-                            <i class="fas fa-copy"></i> Copy Code
-                        </button>
-                        <p style="margin-top: 20px; color: var(--text-muted); font-size: 13px;">
-                            <i class="fas fa-spinner fa-spin"></i> Waiting for authorization...
-                        </p>
+                    <div class="modal-body">
+                        <p style="margin-bottom: 15px;">To enable GitHub sign-in, you need to deploy a small OAuth proxy:</p>
+                        <ol style="text-align: left; margin-left: 20px; line-height: 1.8;">
+                            <li>Go to <a href="https://dash.cloudflare.com/" target="_blank">Cloudflare Dashboard</a></li>
+                            <li>Create a Worker and paste the code from <code>worker/oauth-worker.js</code></li>
+                            <li>Add your GitHub App credentials as environment variables</li>
+                            <li>Update <code>OAUTH_PROXY_URL</code> in <code>js/config.js</code></li>
+                        </ol>
+                        <p style="margin-top: 15px; color: var(--text-muted);">This is required because GitHub's OAuth token exchange doesn't support browser CORS.</p>
+                        <p style="margin-top: 15px;"><strong>For now, try Demo Mode to explore GitAudit!</strong></p>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-secondary" id="device-flow-cancel">Cancel</button>
+                        <button class="btn btn-secondary" onclick="document.getElementById('setup-required-modal').classList.add('hidden')">Close</button>
+                        <button class="btn btn-primary" onclick="document.getElementById('setup-required-modal').classList.add('hidden'); document.getElementById('demo-repo-btn')?.click();">Try Demo</button>
                     </div>
                 </div>
             `;
             document.body.appendChild(modal);
-            
-            document.getElementById('device-flow-cancel').addEventListener('click', () => {
-                this.cancelDeviceFlow();
-            });
         }
-        
         modal.classList.remove('hidden');
     }
     
     /**
-     * Hide device flow modal
-     */
-    hideDeviceFlowModal() {
-        const modal = document.getElementById('device-flow-modal');
-        if (modal) {
-            modal.classList.add('hidden');
-        }
-    }
-    
-    /**
-     * Cancel device flow polling
-     */
-    cancelDeviceFlow() {
-        if (this.deviceFlowPolling) {
-            clearInterval(this.deviceFlowPolling);
-            this.deviceFlowPolling = null;
-        }
-        this.hideDeviceFlowModal();
-    }
-    
-    /**
-     * Poll for access token after user authorizes
-     */
-    async pollForAccessToken(deviceData) {
-        const interval = deviceData.interval || 5;
-        const expiresAt = Date.now() + (deviceData.expires_in * 1000);
-        
-        return new Promise((resolve, reject) => {
-            this.deviceFlowPolling = setInterval(async () => {
-                // Check if expired
-                if (Date.now() > expiresAt) {
-                    this.cancelDeviceFlow();
-                    reject(new Error('Authorization timed out. Please try again.'));
-                    return;
-                }
-                
-                try {
-                    const response = await fetch('https://github.com/login/oauth/access_token', {
-                        method: 'POST',
-                        headers: {
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            client_id: CONFIG.GITHUB_CLIENT_ID,
-                            device_code: deviceData.device_code,
-                            grant_type: 'urn:ietf:params:oauth:grant-type:device_code'
-                        })
-                    });
-                    
-                    const data = await response.json();
-                    
-                    if (data.access_token) {
-                        // Success!
-                        this.cancelDeviceFlow();
-                        await this.setAccessToken(data.access_token);
-                        this.hideDeviceFlowModal();
-                        resolve(data.access_token);
-                        
-                        // Refresh the page to show logged in state
-                        window.location.reload();
-                    } else if (data.error === 'authorization_pending') {
-                        // User hasn't authorized yet, keep polling
-                    } else if (data.error === 'slow_down') {
-                        // We're polling too fast, GitHub will tell us to slow down
-                    } else if (data.error) {
-                        this.cancelDeviceFlow();
-                        reject(new Error(data.error_description || data.error));
-                    }
-                } catch (error) {
-                    console.error('Polling error:', error);
-                }
-            }, interval * 1000);
-        });
-    }
-    
-    /**
-     * Handle OAuth callback (fallback method)
+     * Handle OAuth callback - exchange code for token via proxy
      */
     async handleCallback() {
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get('code');
+        const state = urlParams.get('state');
         const error = urlParams.get('error');
         
         if (error) {
             throw new Error(`OAuth error: ${urlParams.get('error_description') || error}`);
         }
         
+        // Verify state to prevent CSRF
+        const savedState = sessionStorage.getItem('oauth_state');
+        if (state !== savedState) {
+            throw new Error('Invalid OAuth state. Please try again.');
+        }
+        sessionStorage.removeItem('oauth_state');
+        
         if (!code) {
             throw new Error('No authorization code received');
         }
         
-        return code;
+        // Exchange code for token via proxy
+        const response = await fetch(`${CONFIG.OAUTH_PROXY_URL}/api/auth/github`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ code })
+        });
+        
+        const data = await response.json();
+        
+        if (data.error) {
+            throw new Error(data.error_description || data.error);
+        }
+        
+        if (!data.access_token) {
+            throw new Error('No access token received');
+        }
+        
+        return data.access_token;
     }
     
     /**
