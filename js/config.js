@@ -15,8 +15,7 @@ const CONFIG = {
     GITHUB_CLIENT_ID: 'Iv23li0msqAaBhGTV9Pa',
     
     // OAuth Proxy URL (Cloudflare Worker)
-    // Deploy worker/oauth-worker.js and put the URL here
-    OAUTH_PROXY_URL: '', // e.g., 'https://gitaudit-oauth.YOUR-SUBDOMAIN.workers.dev'
+    OAUTH_PROXY_URL: 'https://gitaudit-oauth.wkohara.workers.dev',
     
     // GitHub Pages URL
     CALLBACK_URL: 'https://nagusamecs.github.io/GitAudit/callback.html',

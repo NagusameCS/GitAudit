@@ -25,7 +25,7 @@
     /**
      * Handle OAuth callback
      */
-    function handleOAuthCallback() {
+    async function handleOAuthCallback() {
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get('code');
         
