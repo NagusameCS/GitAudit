@@ -7,20 +7,48 @@
     'use strict';
     
     // Initialize application when DOM is ready
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
         console.log('GitAudit initializing...');
         
         // Initialize UI controller
         ui.init();
         
-        // Handle OAuth callback if on callback page
-        handleOAuthCallback();
+        // Handle OAuth callback if present
+        await handleOAuthCallback();
+        
+        // Handle shared repo link
+        handleSharedRepo();
         
         // Add gradient definition for score circle
         addSVGGradient();
         
         console.log('GitAudit ready!');
     });
+    
+    /**
+     * Handle shared repository link (?repo=owner/repo)
+     */
+    function handleSharedRepo() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const repo = urlParams.get('repo');
+        
+        if (repo && !urlParams.get('code')) {
+            // Clean URL but keep it nice for sharing
+            window.history.replaceState({}, document.title, `${window.location.pathname}?repo=${encodeURIComponent(repo)}`);
+            
+            // Set the repo in the external URL input and analyze
+            const urlInput = document.getElementById('external-repo-url');
+            if (urlInput) {
+                urlInput.value = `https://github.com/${repo}`;
+            }
+            
+            // Show dashboard and trigger analysis
+            ui.showDashboard();
+            setTimeout(() => {
+                ui.analyzeExternalRepo();
+            }, 100);
+        }
+    }
     
     /**
      * Handle OAuth callback

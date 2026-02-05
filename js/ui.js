@@ -48,6 +48,7 @@ class UIController {
         document.getElementById('cancel-audit')?.addEventListener('click', () => this.cancelAudit());
         
         // Results actions
+        document.getElementById('share-btn')?.addEventListener('click', () => this.shareAudit());
         document.getElementById('new-audit-btn')?.addEventListener('click', () => this.showDashboard());
         document.getElementById('clone-with-fixes-btn')?.addEventListener('click', () => this.showCloneModal());
         document.getElementById('download-report-btn')?.addEventListener('click', () => this.downloadReport());
@@ -773,6 +774,27 @@ class UIController {
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
+    }
+    
+    /**
+     * Share audit via URL
+     */
+    shareAudit() {
+        if (!this.currentReport) return;
+        
+        const repo = this.currentReport.repository;
+        const shareUrl = `${window.location.origin}${window.location.pathname}?repo=${encodeURIComponent(repo)}`;
+        
+        // Update URL
+        window.history.replaceState({}, document.title, `?repo=${encodeURIComponent(repo)}`);
+        
+        // Copy to clipboard
+        navigator.clipboard.writeText(shareUrl).then(() => {
+            this.showAlert('Link copied to clipboard!', 'success');
+        }).catch(() => {
+            // Fallback: show the URL in a prompt
+            prompt('Share this link:', shareUrl);
+        });
     }
     
     /**
