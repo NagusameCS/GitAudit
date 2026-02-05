@@ -1,0 +1,8 @@
+name = "gitaudit-oauth"
+main = "oauth-worker.js"
+compatibility_date = "2026-02-05"
+
+# Environment variables (set these in Cloudflare dashboard for security)
+# [vars]
+# GITHUB_CLIENT_ID = "your-client-id"
+# GITHUB_CLIENT_SECRET = "your-client-secret"  # Use encrypted secrets instead!
