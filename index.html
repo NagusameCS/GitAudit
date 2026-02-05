@@ -13,7 +13,16 @@
         <!-- Navigation -->
         <nav class="navbar">
             <div class="nav-brand">
-                <i class="fas fa-shield-alt"></i>
+                <svg class="brand-icon" viewBox="0 0 100 100" width="24" height="24">
+                    <defs>
+                        <linearGradient id="brand-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#58a6ff" />
+                            <stop offset="100%" style="stop-color:#3fb950" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M50 5 L90 20 L90 45 C90 70 70 90 50 95 C30 90 10 70 10 45 L10 20 Z" fill="#0d1117" stroke="url(#brand-gradient)" stroke-width="3"/>
+                    <path d="M30 50 L45 65 L70 35" fill="none" stroke="url(#brand-gradient)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
                 <span>GitAudit</span>
             </div>
             <div class="nav-links">
@@ -22,11 +31,6 @@
                 <a href="https://github.com/NagusameCS/GitAudit" target="_blank">
                     <i class="fab fa-github"></i> GitHub
                 </a>
-            </div>
-            <div class="nav-auth" id="nav-auth">
-                <button class="btn btn-primary" id="nav-login-btn">
-                    <i class="fab fa-github"></i> Sign In
-                </button>
             </div>
         </nav>
 
@@ -301,7 +305,7 @@
                     </div>
                 </div>
                 <div class="score-breakdown">
-                    <div class="score-item">
+                    <div class="score-item clickable" data-category="security">
                         <div class="score-item-header">
                             <i class="fas fa-lock"></i>
                             <span>Security</span>
@@ -311,7 +315,7 @@
                         </div>
                         <span class="score-value" id="security-score">--</span>
                     </div>
-                    <div class="score-item">
+                    <div class="score-item clickable" data-category="performance">
                         <div class="score-item-header">
                             <i class="fas fa-bolt"></i>
                             <span>Performance</span>
@@ -321,7 +325,7 @@
                         </div>
                         <span class="score-value" id="performance-score">--</span>
                     </div>
-                    <div class="score-item">
+                    <div class="score-item clickable" data-category="quality">
                         <div class="score-item-header">
                             <i class="fas fa-code"></i>
                             <span>Code Quality</span>
@@ -331,7 +335,7 @@
                         </div>
                         <span class="score-value" id="quality-score">--</span>
                     </div>
-                    <div class="score-item">
+                    <div class="score-item clickable" data-category="unused">
                         <div class="score-item-header">
                             <i class="fas fa-broom"></i>
                             <span>Cleanliness</span>
@@ -384,14 +388,26 @@
             </div>
 
             <!-- Issues List with Directory View -->
-            <div class="issues-container">
+            <div class="issues-container" id="issues-section">
                 <div class="issues-sidebar">
                     <h3><i class="fas fa-folder-tree"></i> File Explorer</h3>
-                    <div class="filter-buttons">
-                        <button class="filter-btn active" data-filter="all">All</button>
-                        <button class="filter-btn" data-filter="critical">Critical</button>
-                        <button class="filter-btn" data-filter="warning">Warning</button>
-                        <button class="filter-btn" data-filter="info">Info</button>
+                    <div class="filter-group">
+                        <label>Severity</label>
+                        <div class="filter-buttons">
+                            <button class="filter-btn active" data-filter="all">All</button>
+                            <button class="filter-btn" data-filter="critical">Critical</button>
+                            <button class="filter-btn" data-filter="warning">Warning</button>
+                            <button class="filter-btn" data-filter="info">Info</button>
+                        </div>
+                    </div>
+                    <div class="filter-group">
+                        <label>Category</label>
+                        <div class="filter-buttons category-filters">
+                            <button class="filter-btn" data-filter="security"><i class="fas fa-lock"></i> Security</button>
+                            <button class="filter-btn" data-filter="performance"><i class="fas fa-bolt"></i> Performance</button>
+                            <button class="filter-btn" data-filter="quality"><i class="fas fa-code"></i> Quality</button>
+                            <button class="filter-btn" data-filter="unused"><i class="fas fa-broom"></i> Cleanliness</button>
+                        </div>
                     </div>
                     <div class="file-tree" id="file-tree">
                         <!-- File tree will be generated here -->

@@ -64,6 +64,16 @@ class UIController {
             btn.addEventListener('click', (e) => this.filterIssues(e.target.dataset.filter));
         });
         
+        // Clickable category scores
+        document.querySelectorAll('.score-item.clickable').forEach(item => {
+            item.addEventListener('click', (e) => {
+                const category = e.currentTarget.dataset.category;
+                this.filterIssues(category);
+                // Scroll to issues section
+                document.getElementById('issues-section')?.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+        
         // Issues sort
         document.getElementById('issues-sort')?.addEventListener('change', (e) => this.sortIssues(e.target.value));
     }

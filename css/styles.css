@@ -149,6 +149,12 @@ a:hover {
     font-size: 24px;
 }
 
+.nav-brand .brand-icon {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
 .nav-links {
     display: flex;
     align-items: center;
@@ -798,6 +804,22 @@ a:hover {
     gap: 16px;
 }
 
+.score-item.clickable {
+    cursor: pointer;
+    padding: 8px 12px;
+    margin: -8px -12px;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+}
+
+.score-item.clickable:hover {
+    background-color: var(--surface-hover);
+}
+
+.score-item.clickable:active {
+    transform: scale(0.98);
+}
+
 .score-item-header {
     display: flex;
     align-items: center;
@@ -916,11 +938,35 @@ a:hover {
     gap: 8px;
 }
 
+.filter-group {
+    margin-bottom: 16px;
+}
+
+.filter-group label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+}
+
 .filter-buttons {
     display: flex;
     gap: 8px;
-    margin-bottom: 16px;
+    margin-bottom: 0;
     flex-wrap: wrap;
+}
+
+.category-filters .filter-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.category-filters .filter-btn i {
+    font-size: 10px;
 }
 
 .filter-btn {
