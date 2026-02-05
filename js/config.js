@@ -17,8 +17,8 @@ const CONFIG = {
     // OAuth Proxy URL (Cloudflare Worker)
     OAUTH_PROXY_URL: 'https://gitaudit-oauth.wkohara.workers.dev',
     
-    // GitHub Pages URL
-    CALLBACK_URL: 'https://nagusamecs.github.io/GitAudit/callback.html',
+    // GitHub Pages URL (callback is handled by main page)
+    CALLBACK_URL: 'https://nagusamecs.github.io/GitAudit/',
     
     // GitHub API Base URL
     GITHUB_API_BASE: 'https://api.github.com',
