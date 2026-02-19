@@ -1,0 +1,34 @@
+{
+  "name": "gitaudit-cli",
+  "version": "1.0.0",
+  "description": "GitAudit CLI — Comprehensive code analysis for any GitHub repository or local project",
+  "main": "src/index.js",
+  "bin": {
+    "gitaudit": "./bin/gitaudit.js"
+  },
+  "scripts": {
+    "start": "node bin/gitaudit.js",
+    "test": "node bin/gitaudit.js --help"
+  },
+  "keywords": [
+    "code-audit",
+    "security",
+    "performance",
+    "code-quality",
+    "github",
+    "static-analysis",
+    "linter"
+  ],
+  "author": "NagusameCS",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "commander": "^11.1.0",
+    "glob": "^10.3.10",
+    "ora": "^5.4.1",
+    "node-fetch": "^2.7.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

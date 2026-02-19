@@ -156,6 +156,25 @@ const CONFIG = {
 };
 ```
 
+## 💻 CLI Tool
+
+GitAudit also ships with a full-featured **command-line interface** that runs the same analysis engine locally or against remote GitHub repos.
+
+```bash
+cd cli && npm install
+
+# Audit a local project
+node bin/gitaudit.js /path/to/project
+
+# Audit a GitHub repository
+node bin/gitaudit.js owner/repo
+
+# JSON output, critical only
+node bin/gitaudit.js . --json --severity critical -o report.json
+```
+
+The CLI supports **100+ languages and config formats** with language-specific rules for security, performance, quality, and dead-code detection. See [cli/README.md](cli/README.md) for full documentation.
+
 ## 🤝 Contributing
 
 Contributions are welcome! Here's how you can help:
